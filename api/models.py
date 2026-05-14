@@ -70,6 +70,27 @@ class ClientDetail(BaseModel):
 
 
 # ─────────────────────────────────────────
+# Users
+# ─────────────────────────────────────────
+class UserCreate(BaseModel):
+    username: str
+    password: str
+
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    password: Optional[str] = None
+
+# ─────────────────────────────────────────
+# Settings
+# ─────────────────────────────────────────
+class SettingCreate(BaseModel):
+    key: str
+    value: str
+
+class SettingUpdate(BaseModel):
+    value: Optional[str] = None
+
+# ─────────────────────────────────────────
 # Client Usage Snapshots (hourly traffic snapshots)
 # ─────────────────────────────────────────
 class UsageSnapshot(BaseModel):

@@ -114,7 +114,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
@@ -152,7 +151,6 @@ cython_debug/
 .idea/
 
 # VS Code
-.vscode/
 
 # Node.js
 node_modules/
@@ -169,3 +167,4 @@ yarn-error.log*
 # OS specific
 .DS_Store
 Thumbs.db
+config.bat
