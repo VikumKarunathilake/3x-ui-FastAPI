@@ -16,5 +16,7 @@ class Settings:
             return local_path
         return Path(self.XUI_DB_PATH)
 
+    CACHE_TTL: int = int(os.getenv("CACHE_TTL", "60"))
+
 
 settings = Settings()
