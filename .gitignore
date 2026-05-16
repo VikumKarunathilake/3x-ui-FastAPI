@@ -160,11 +160,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.log
 
 # Databases
 *.db
 *.sqlite
 *.sqlite3
+*.db-shm
+*.db-wal
 
 # OS specific
 .DS_Store
