@@ -15,6 +15,37 @@ async def get_db():
         yield db
 
 
+@asynccontextmanager
+async def get_traffic_db():
+    async with aiosqlite.connect(
+        f"file:{settings.full_traffic_db_path.as_posix()}?mode=ro", uri=True
+    ) as db:
+        db.row_factory = aiosqlite.Row
+        yield db
+
+
+async def init_traffic_db():
+    """Create traffic.db and define client_ips schema"""
+    db_path = settings.full_traffic_db_path
+    if not db_path.exists():
+        async with aiosqlite.connect(db_path) as db:
+            await db.execute(
+                """
+                CREATE TABLE IF NOT EXISTS client_ips (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    email TEXT,
+                    ip TEXT,
+                    last_seen TEXT,
+                    UNIQUE(email, ip)
+                )
+                """
+            )
+            await db.execute(
+                "CREATE INDEX IF NOT EXISTS idx_client_ips_email ON client_ips(email)"
+            )
+            await db.commit()
+
+
 _cache: Dict[str, tuple] = {}
 
 

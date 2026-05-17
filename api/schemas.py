@@ -14,3 +14,10 @@ class ClientTraffic(BaseModel):
     total: Optional[int] = None
     reset: Optional[int] = None
     last_online: Optional[int] = None
+
+
+class ClientIP(BaseModel):
+    id: Optional[int] = None
+    email: str
+    ip: str
+    last_seen: str

@@ -169,6 +169,9 @@ yarn-error.log*
 *.db-shm
 *.db-wal
 
+etc
+usr
+
 # OS specific
 .DS_Store
 Thumbs.db
