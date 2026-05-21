@@ -33,6 +33,7 @@ async def init_traffic_db():
                 """
                 CREATE TABLE IF NOT EXISTS client_ips (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    client_id INTEGER,
                     email TEXT,
                     ip TEXT,
                     last_seen TEXT,

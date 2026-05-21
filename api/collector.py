@@ -4,6 +4,7 @@ import aiosqlite
 import logging
 from pathlib import Path
 from api.config import settings
+from api.database import get_client_by_email
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +58,11 @@ async def collect_logs():
                 if match:
                     data = match.groupdict()
                     email = data["email"].strip()
+                    client_id = None
+                    client_info = await get_client_by_email(email)
+                    if client_info:
+                        client_id = client_info.get("id")
+
                     raw_addr = data["client_address"]
                     ip = raw_addr.split(":")[-2] if ":" in raw_addr else raw_addr
                     if "]" in ip:
@@ -69,15 +75,20 @@ async def collect_logs():
                         ip = raw_addr
 
                     new_logs.append(
-                        {"email": email, "ip": ip, "last_seen": data["timestamp"]}
+                        {
+                            "client_id": client_id,
+                            "email": email,
+                            "ip": ip,
+                            "last_seen": data["timestamp"],
+                        }
                     )
 
         if new_logs:
             async with aiosqlite.connect(db_path) as db:
                 await db.executemany(
                     """
-                    INSERT OR REPLACE INTO client_ips (email, ip, last_seen)
-                    VALUES (:email, :ip, :last_seen)
+                    INSERT OR REPLACE INTO client_ips (client_id, email, ip, last_seen)
+                    VALUES (:client_id, :email, :ip, :last_seen)
                     """,
                     new_logs,
                 )

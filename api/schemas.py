@@ -18,6 +18,7 @@ class ClientTraffic(BaseModel):
 
 class ClientIP(BaseModel):
     id: Optional[int] = None
+    client_id: Optional[int] = None
     email: str
     ip: str
     last_seen: str

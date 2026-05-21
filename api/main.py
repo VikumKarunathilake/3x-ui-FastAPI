@@ -19,8 +19,8 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
         RotatingFileHandler(log_dir / "api.log", maxBytes=5242880, backupCount=5),
-        logging.StreamHandler()
-    ]
+        logging.StreamHandler(),
+    ],
 )
 logger = logging.getLogger(__name__)
 
@@ -64,13 +64,17 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time
-    logger.info(f"{request.client.host} - \"{request.method} {request.url.path}\" {response.status_code} - {process_time:.4f}s")
+    logger.info(
+        f'{request.client.host} - "{request.method} {request.url.path}" {response.status_code} - {process_time:.4f}s'
+    )
     return response
+
 
 app.include_router(clients.router, prefix="/api")
 app.include_router(logs.router, prefix="/api")

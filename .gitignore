@@ -171,6 +171,7 @@ yarn-error.log*
 
 etc
 usr
+.ruff_cache
 
 # OS specific
 .DS_Store

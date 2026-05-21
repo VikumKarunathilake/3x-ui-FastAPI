@@ -20,8 +20,12 @@ class Settings:
     @property
     def full_traffic_db_path(self) -> Path:
         local_path = self.BASE_DIR / self.TRAFFIC_DB_PATH.lstrip("/")
-        local_path.parent.mkdir(parents=True, exist_ok=True)
-        return local_path
+        if local_path.exists():
+            return local_path
+
+        path = Path(self.TRAFFIC_DB_PATH)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        return path
 
     CACHE_TTL: int = int(os.getenv("CACHE_TTL", "60"))
     COLLECT_INTERVAL: int = int(os.getenv("COLLECT_INTERVAL", "60"))
