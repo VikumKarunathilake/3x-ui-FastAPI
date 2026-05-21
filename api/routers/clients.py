@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, HTTPException
 from api.schemas import ClientTraffic
 from api.database import (
@@ -6,6 +7,21 @@ from api.database import (
 )
 
 router = APIRouter(prefix="/clients", tags=["clients"])
+
+
+@router.get("", response_model=List[str])
+async def list_client_emails():
+    """List all available client emails from database"""
+    from api.database import get_db
+    try:
+        async with get_db() as db:
+            async with db.execute(
+                "SELECT DISTINCT email FROM client_traffics WHERE email IS NOT NULL AND email != '' ORDER BY email ASC"
+            ) as cursor:
+                rows = await cursor.fetchall()
+                return [row["email"] for row in rows]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/{email}", response_model=ClientTraffic)

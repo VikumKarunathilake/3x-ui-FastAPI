@@ -29,6 +29,7 @@ class Settings:
 
     CACHE_TTL: int = int(os.getenv("CACHE_TTL", "60"))
     COLLECT_INTERVAL: int = int(os.getenv("COLLECT_INTERVAL", "60"))
+    TRAFFIC_SNAPSHOT_INTERVAL: int = int(os.getenv("TRAFFIC_SNAPSHOT_INTERVAL", "600"))
 
 
 settings = Settings()

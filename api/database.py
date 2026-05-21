@@ -25,26 +25,44 @@ async def get_traffic_db():
 
 
 async def init_traffic_db():
-    """Create traffic.db and define client_ips schema"""
+    """Create traffic.db and define client_ips and client_traffic_snapshots schemas"""
     db_path = settings.full_traffic_db_path
-    if not db_path.exists():
-        async with aiosqlite.connect(db_path) as db:
-            await db.execute(
-                """
-                CREATE TABLE IF NOT EXISTS client_ips (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    client_id INTEGER,
-                    email TEXT,
-                    ip TEXT,
-                    last_seen INTEGER,
-                    UNIQUE(email, ip)
-                )
-                """
+    async with aiosqlite.connect(db_path) as db:
+        await db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS client_ips (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                client_id INTEGER,
+                email TEXT,
+                ip TEXT,
+                last_seen INTEGER,
+                UNIQUE(email, ip)
             )
-            await db.execute(
-                "CREATE INDEX IF NOT EXISTS idx_client_ips_email ON client_ips(email)"
+            """
+        )
+        await db.execute(
+            "CREATE INDEX IF NOT EXISTS idx_client_ips_email ON client_ips(email)"
+        )
+
+        await db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS client_traffic_snapshots (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                client_id INTEGER,
+                email TEXT,
+                up INTEGER,
+                down INTEGER,
+                timestamp INTEGER
             )
-            await db.commit()
+            """
+        )
+        await db.execute(
+            "CREATE INDEX IF NOT EXISTS idx_client_traffic_snapshots_email ON client_traffic_snapshots(email)"
+        )
+        await db.execute(
+            "CREATE INDEX IF NOT EXISTS idx_client_traffic_snapshots_timestamp ON client_traffic_snapshots(timestamp)"
+        )
+        await db.commit()
 
 
 _cache: Dict[str, tuple] = {}

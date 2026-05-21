@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 
 class ClientTraffic(BaseModel):
@@ -22,3 +22,26 @@ class ClientIP(BaseModel):
     email: str
     ip: str
     last_seen: Union[int, str]
+
+
+class ClientTrafficSnapshot(BaseModel):
+    id: Optional[int] = None
+    client_id: Optional[int] = None
+    email: str
+    up: int
+    down: int
+    timestamp: int
+
+
+class TrafficStatsItem(BaseModel):
+    label: str
+    up: int
+    down: int
+    total: int
+
+
+class TrafficStatsResponse(BaseModel):
+    email: str
+    daily: List[TrafficStatsItem]
+    weekly: List[TrafficStatsItem]
+    monthly: List[TrafficStatsItem]
