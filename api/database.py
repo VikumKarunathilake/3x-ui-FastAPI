@@ -36,7 +36,7 @@ async def init_traffic_db():
                     client_id INTEGER,
                     email TEXT,
                     ip TEXT,
-                    last_seen TEXT,
+                    last_seen INTEGER,
                     UNIQUE(email, ip)
                 )
                 """

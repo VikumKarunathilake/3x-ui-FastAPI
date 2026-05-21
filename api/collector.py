@@ -3,6 +3,7 @@ import os
 import aiosqlite
 import logging
 from pathlib import Path
+from datetime import datetime
 from api.config import settings
 from api.database import get_client_by_email
 
@@ -74,12 +75,23 @@ async def collect_logs():
                     else:
                         ip = raw_addr
 
+                    raw_ts = data["timestamp"]
+                    try:
+                        # Split fractional seconds to handle various formats robustly
+                        dt = datetime.strptime(
+                            raw_ts.split(".")[0], "%Y/%m/%d %H:%M:%S"
+                        )
+                        unix_ts = int(dt.timestamp())
+                    except Exception as e:
+                        logger.error(f"Error parsing log timestamp {raw_ts}: {e}")
+                        unix_ts = raw_ts
+
                     new_logs.append(
                         {
                             "client_id": client_id,
                             "email": email,
                             "ip": ip,
-                            "last_seen": data["timestamp"],
+                            "last_seen": unix_ts,
                         }
                     )
 

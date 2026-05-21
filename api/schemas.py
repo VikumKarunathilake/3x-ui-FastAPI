@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Union
 
 
 class ClientTraffic(BaseModel):
@@ -21,4 +21,4 @@ class ClientIP(BaseModel):
     client_id: Optional[int] = None
     email: str
     ip: str
-    last_seen: str
+    last_seen: Union[int, str]

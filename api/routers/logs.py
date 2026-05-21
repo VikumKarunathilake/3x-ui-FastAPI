@@ -1,5 +1,5 @@
-from fastapi import APIRouter, HTTPException, Query
-from typing import List, Optional
+from fastapi import APIRouter, HTTPException
+from typing import List
 from api.database import get_traffic_db, get_client_by_id
 from api.schemas import ClientIP
 
