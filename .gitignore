@@ -176,3 +176,7 @@ usr
 # OS specific
 .DS_Store
 Thumbs.db
+
+# Collector state
+collector_state.txt
+
