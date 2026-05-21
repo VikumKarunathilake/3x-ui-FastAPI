@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
 from logging.handlers import RotatingFileHandler
@@ -89,6 +90,16 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+# Configure Authorized Origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.allow_origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Permits GET, POST, OPTIONS, etc.
+    allow_headers=["*"],  # Permits all headers
+)
+
 
 
 @app.middleware("http")
