@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import List
 from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent.parent / ".env")
@@ -31,5 +32,13 @@ class Settings:
     COLLECT_INTERVAL: int = int(os.getenv("COLLECT_INTERVAL", "60"))
     TRAFFIC_SNAPSHOT_INTERVAL: int = int(os.getenv("TRAFFIC_SNAPSHOT_INTERVAL", "600"))
 
+    @property
+    def allow_origins(self) -> List[str]:
+        origins = os.getenv("ALLOW_ORIGINS", "")
+        if not origins:
+            return ["http://localhost:4321", "https://consol.ceyloncloud.site"]
+        return [origin.strip() for origin in origins.split(",") if origin.strip()]
+
 
 settings = Settings()
+
